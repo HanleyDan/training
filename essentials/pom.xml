@@ -7,32 +7,34 @@
   <groupId>com.hazelcast</groupId>
   <artifactId>essentials-training-parent</artifactId>
   <packaging>pom</packaging>
-  <version>1.0</version>
+  <version>1.1</version>
 
   <modules>
-    <module>lab1</module>
-    <module>lab2</module>
-    <module>lab3</module>
-    <module>lab4</module>
-    <module>lab5</module>
-    <module>lab6</module>
-    <module>lab7</module>
-    <module>cloud-lab</module>
-    <module>jet-lab</module>
+    <module>lab1_create_instances</module>
+    <module>lab2_create_clients</module>
+    <module>lab3_create_embedded_instances</module>
+    <module>lab4_setting_config</module>
+    <module>lab5_more_config</module>
+    <module>lab6_management_center_TODO</module>
+    <module>lab7_map_config</module>
+    <module>lab8_streaming_data</module>
+    <module>lab9_cloud_lab</module>
   </modules>
 
   <properties>
-    <hazelcast.version>4.1</hazelcast.version>
+    <hazelcast.version>5.0-BETA-1</hazelcast.version>
+    <encoding>UTF-8</encoding>
   </properties>
 
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <version>3.8.1</version>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <target>1.8</target>
-          <source>1.8</source>
+          <target>11</target>
+          <source>11</source>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>

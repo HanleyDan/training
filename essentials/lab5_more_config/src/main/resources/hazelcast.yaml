@@ -1,0 +1,7 @@
+hazelcast:
+  # For trainings everyone should create his/her own cluster, therefore
+  # multicast is disabled and other nodes are only searched for on localhost
+  network:
+    join:
+      # Deactivate multicast discovery which is enabled by default 
+      # Configure the node to be bound to localhost only 

@@ -1,0 +1,10 @@
+hazelcast:
+  # For trainings everyone should create his/her own cluster, therefore
+  # multicast is disabled and other nodes are only searched for on localhost
+  network:
+    join:
+      multicast:
+        enabled: 'false'
+      tcp-ip:
+        interface: 127.0.0.1
+        enabled: 'true'

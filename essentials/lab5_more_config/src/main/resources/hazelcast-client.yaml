@@ -1,0 +1,3 @@
+hazelcast-client:
+  network:
+    # Put the relevant configuration for the client to detect and connect with members
