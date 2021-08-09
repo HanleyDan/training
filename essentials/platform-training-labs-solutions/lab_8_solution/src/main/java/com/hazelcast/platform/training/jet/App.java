@@ -1,7 +1,9 @@
 package com.hazelcast.platform.training.jet;
 
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
+
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
 import com.hazelcast.jet.pipeline.test.TestSources;
@@ -21,7 +23,8 @@ public class App
     	   .writeTo(Sinks.logger());
     	  
     	  //TODO: Using the provide pipeline 'p', instantiate a Jet instance, start a job, and wait for it to complete.
-    	  JetInstance jet = Jet.newJetInstance();
+		  HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+		  JetService jet = hz.getJet();
     	  jet.newJob(p).join();
     	}
 }

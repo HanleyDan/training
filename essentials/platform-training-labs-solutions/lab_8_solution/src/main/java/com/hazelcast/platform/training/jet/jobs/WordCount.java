@@ -5,6 +5,7 @@ import static com.hazelcast.jet.Traversers.traverseArray;
 import static com.hazelcast.jet.aggregate.AggregateOperations.counting;
 import static java.util.Comparator.comparingLong;
 
+import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.platform.training.common.Utils;
 
 import java.io.BufferedReader;
@@ -33,9 +34,9 @@ import java.util.regex.Pattern;
  */
 
 
+import com.hazelcast.core.Hazelcast;
 
-import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig ;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -54,10 +55,10 @@ public class WordCount {
     private static final String BOOK_LINES = "bookLines";
     private static final String COUNTS = "counts";
 
-    private JetInstance jet;
+    private JetService jet;
 
     private static Pipeline buildPipeline() {
-    	
+
         Pattern delimiter = Pattern.compile("\\W+");
         Pipeline p = Pipeline.create();
         p.readFrom(Sources.<Long, String>map(BOOK_LINES))
@@ -80,23 +81,25 @@ public class WordCount {
             System.out.println("\nCounting words... ");
             long start = System.nanoTime();
 
-            //TODO: Use the jet instance to create a new job name 'WordCountBatch' and and wait for it to complete.  
+            //TODO: Use the jet instance to create a new job name 'WordCountBatch' and and wait for it to complete.
             Pipeline p = buildPipeline();
             JobConfig jobConfig = new JobConfig();
             jobConfig.setName("WordCountBatch");
             jet.newJob(p, jobConfig).join();
-            
+
             System.out.println("done in " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) + " milliseconds.");
             Map<String, Long> results = Utils.remoteHazelcastInstance(Utils.clientConfigForExternalHazelcast()).getMap(COUNTS);
             checkResults(results);
             printResults(results);
         } finally {
-            Jet.shutdownAll();
+            Hazelcast.shutdownAll();
         }
     }
 
     private void setup() {
-        jet = Jet.bootstrappedInstance();
+        HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+        jet = hz.getJet();
+
         System.out.println("Loading The Complete Works of William Shakespeare");
         try {
             long[] lineNum = {0};
@@ -105,7 +108,7 @@ public class WordCount {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(stream))) {
                 reader.lines().forEach(line -> bookLines.put(++lineNum[0], line));
             }
-            jet.getMap(BOOK_LINES).putAll(bookLines);
+            hz.getMap(BOOK_LINES).putAll(bookLines);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

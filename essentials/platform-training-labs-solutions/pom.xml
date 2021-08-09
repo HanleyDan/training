@@ -7,8 +7,8 @@
   <name>platform-training-labs-solutions</name>
   <description>Solutions to platform training labs</description>
   <modules>
-  	<module>cloudClient-solution</module>
-  	<module>imdgCluster-solution</module>
-  	<module>jetEngine-solution</module>
+  	<module>labs_1-7_solution</module>
+  	<module>lab_8_solution</module>
+  	<module>lab_9_solution</module>
   </modules>
 </project>

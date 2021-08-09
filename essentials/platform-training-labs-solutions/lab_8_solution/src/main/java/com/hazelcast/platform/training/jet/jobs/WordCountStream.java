@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import com.hazelcast.collection.IQueue;
+import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 
 /*
@@ -30,7 +31,7 @@ import com.hazelcast.core.HazelcastInstance;
  */
 
 import com.hazelcast.jet.Jet;
-import com.hazelcast.jet.JetInstance;
+import com.hazelcast.jet.JetService;
 import com.hazelcast.jet.config.JobConfig;
 import com.hazelcast.jet.pipeline.Pipeline;
 import com.hazelcast.jet.pipeline.Sinks;
@@ -50,7 +51,7 @@ public class WordCountStream {
 
 	private static final String STREAM_COUNTS = "streamCounts";
 
-	private JetInstance jet;
+	private JetService jet;
     
 	// Create a client to the remote IMDG Cluster 
 	private static HazelcastInstance imdgClientInstance = Utils
@@ -85,8 +86,8 @@ public class WordCountStream {
 		try {
 			
             //TODO: Get the jet instance and create a new job name 'WordCountStreaming'.  
-			//jet = Jet.bootstrappedInstance();
-			jet =  Jet.newJetInstance();
+			HazelcastInstance hz = Hazelcast.bootstrappedInstance();
+			jet =  hz.getJet();
 			
 			Pipeline p = buildPipeline();
 			JobConfig jobConfig = new JobConfig();
